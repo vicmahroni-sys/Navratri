@@ -3,170 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navratri Poster Maker - VICT Computers</title>
+    <title>शहीद दिवस पोस्टर टेम्प्लेट - VICT कंप्यूटर</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            background-color: #fdf3e7;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
-        .container {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-            max-width: 500px;
-            margin: auto;
-            border-top: 5px solid #d32f2f;
+
+        .poster-container {
+            position: relative;
+            width: 320px; /* पोस्टर का अनुपात (9:16) */
+            height: 569px; 
+            border: 2px solid #ccc;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: #fff;
         }
-        h2 { color: #d32f2f; margin-bottom: 5px; }
-        h4 { color: #ff8f00; margin-top: 0; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        label { font-weight: bold; color: #333; display: block; margin-bottom: 5px; }
-        input[type="text"], input[type="file"] {
+
+        .poster-image {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
+            height: 100%;
+            object-fit: contain; /* सुनिश्चित करता है कि पूरी पोस्टर छवि दिखाई दे */
         }
-        button {
-            background-color: #d32f2f;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 18px;
-            border-radius: 6px;
+
+        /* छात्र फोटो अपलोड प्लेसहोल्डर */
+        .student-photo-overlay {
+            position: absolute;
+            bottom: 60px; /* प्लेसहोल्डर की सटीक स्थिति (निचले विवरण के पास) */
+            right: 20px; 
+            width: 110px; /* पोस्टर पर प्लेसहोल्डर का आकार */
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid white;
+            overflow: hidden;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .student-photo-overlay:hover {
+            transform: scale(1.05);
+            background-color: #ccc;
+        }
+
+        .student-preview {
             width: 100%;
-            font-weight: bold;
-            margin-top: 10px;
+            height: 100%;
+            object-fit: cover;
+            display: none; /* शुरुआत में छिपा हुआ */
         }
-        button:hover { background-color: #b71c1c; }
-        canvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-        }
-        .download-btn {
-            display: none;
-            background-color: #2e7d32;
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
+
+        .upload-placeholder {
             display: block;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.2;
+            padding: 10px;
         }
+
+        /* फ़ाइल इनपुट छिपा हुआ */
+        #student-photo-input {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>VICT COMPUTERS</h2>
-        <h4>चैत्र नवरात्रि और नव वर्ष शुभकामनाएं</h4>
-        
-        <div class="form-group">
-            <label>विद्यार्थी का नाम:</label>
-            <input type="text" id="userName" placeholder="अपना नाम यहाँ लिखें">
-        </div>
-        
-        <div class="form-group">
-            <label>अपनी फोटो चुनें:</label>
-            <input type="file" id="userPhoto" accept="image/*">
-        </div>
-        
-        <button onclick="generatePoster()">पोस्टर तैयार करें</button>
+    <div class="poster-container">
+        <img src="image_2.png" alt="Shaheed Diwas Poster Template" class="poster-image">
 
-        <canvas id="posterCanvas"></canvas>
-        
-        <a id="downloadBtn" class="download-btn" href="#" download="VICT_Navratri_Poster.png" style="display:none;">⬇️ पोस्टर डाउनलोड करें</a>
+        <label for="student-photo-input" class="student-photo-overlay">
+            <span class="upload-placeholder">यहाँ छात्र की<br>फोटो लगाएं</span>
+            <img src="" alt="Student Preview" class="student-preview" id="student-preview">
+        </label>
+        <input type="file" id="student-photo-input" accept="image/*">
     </div>
 
     <script>
-        function generatePoster() {
-            const canvas = document.getElementById('posterCanvas');
-            const ctx = canvas.getContext('2d');
-            const name = document.getElementById('userName').value;
-            const photoInput = document.getElementById('userPhoto');
+        const fileInput = document.getElementById('student-photo-input');
+        const previewImage = document.getElementById('student-preview');
+        const placeholderText = document.querySelector('.upload-placeholder');
 
-            if (!name || photoInput.files.length === 0) {
-                alert("कृपया अपना नाम लिखें और फोटो अपलोड करें!");
-                return;
-            }
-
-            const templateImg = new Image();
-            templateImg.src = 'template.jpg'; // GitHub पर आपके खाली पोस्टर का नाम
-
-            templateImg.onload = function() {
-                // कैनवास का साइज ओरिजिनल पोस्टर के बराबर सेट करें
-                canvas.width = templateImg.width;
-                canvas.height = templateImg.height;
-
-                // 1. सबसे पहले खाली पोस्टर ड्रा करें
-                ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
-
-                // 2. विद्यार्थी की फोटो लोड करें
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    const userImg = new Image();
-                    userImg.onload = function() {
-                        
-                        // फोटो की चौड़ाई और ऊंचाई (पोस्टर के साइज के अनुसार एडजस्ट करें)
-                        const photoW = canvas.width * 0.28; // पोस्टर की चौड़ाई का 28%
-                        const photoH = photoW * 1.2; // ऊंचाई थोड़ी ज्यादा (Portrait)
-                        
-                        // दाहिने नीचे कोने की पोजीशन
-                        const photoX = canvas.width - photoW - (canvas.width * 0.06); 
-                        const photoY = canvas.height - photoH - (canvas.height * 0.08);
-
-                        // फोटो के चारों ओर एक गोल्डन/पीला बॉर्डर बनाएं
-                        ctx.fillStyle = "#ff8f00";
-                        ctx.fillRect(photoX - 8, photoY - 8, photoW + 16, photoH + 16);
-                        ctx.fillStyle = "#ffffff";
-                        ctx.fillRect(photoX - 4, photoY - 4, photoW + 8, photoH + 8);
-
-                        // विद्यार्थी की फोटो ड्रा करें
-                        ctx.drawImage(userImg, photoX, photoY, photoW, photoH);
-
-                        // 3. विद्यार्थी का नाम लिखें (फोटो के नीचे)
-                        const fontSize = Math.floor(canvas.width * 0.025); // पोस्टर के हिसाब से फॉन्ट साइज
-                        ctx.font = `bold ${fontSize}px Arial`;
-                        ctx.textAlign = "center";
-                        ctx.fillStyle = "#d32f2f"; // लाल रंग
-                        
-                        // नाम में वाइट स्ट्रोक (आउटलाइन) ताकि साफ दिखे
-                        ctx.strokeStyle = "white";
-                        ctx.lineWidth = 5;
-                        
-                        const textX = photoX + (photoW / 2);
-                        const textY = photoY + photoH + (fontSize * 1.5);
-
-                        ctx.strokeText(name, textX, textY);
-                        ctx.fillText(name, textX, textY);
-
-                        // कैनवास और डाउनलोड बटन दिखाएं
-                        canvas.style.display = "block";
-                        const downloadBtn = document.getElementById('downloadBtn');
-                        downloadBtn.style.display = "block";
-                        downloadBtn.href = canvas.toDataURL("image/png");
-                    }
-                    userImg.src = event.target.result;
+                reader.onload = function() {
+                    previewImage.src = reader.result;
+                    previewImage.style.display = 'block';
+                    placeholderText.style.display = 'none';
                 }
-                reader.readAsDataURL(photoInput.files[0]);
-            };
-
-            templateImg.onerror = function() {
-                alert("Error: template.jpg फाइल लोड नहीं हो पाई। सुनिश्चित करें कि यह GitHub पर सही नाम से अपलोड है।");
-            };
-        }
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
+
 </body>
 </html>
