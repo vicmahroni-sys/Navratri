@@ -3,111 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>शहीद दिवस पोस्टर टेम्प्लेट - VICT कंप्यूटर</title>
+    <title>शहीद दिवस पोस्टर - VICT Computers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            background: #f4f7f6; 
+            margin: 0; 
+            padding: 20px; 
         }
-
-        .poster-container {
+        .app-container { 
+            max-width: 400px; 
+            margin: auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        h2 { color: #333; margin-bottom: 5px; font-size: 22px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        
+        /* पोस्टर का मुख्य फ्रेम */
+        #poster-node {
             position: relative;
-            width: 320px; /* पोस्टर का अनुपात (9:16) */
-            height: 569px; 
-            border: 2px solid #ccc;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-
-        .poster-image {
             width: 100%;
-            height: 100%;
-            object-fit: contain; /* सुनिश्चित करता है कि पूरी पोस्टर छवि दिखाई दे */
-        }
-
-        /* छात्र फोटो अपलोड प्लेसहोल्डर */
-        .student-photo-overlay {
-            position: absolute;
-            bottom: 60px; /* प्लेसहोल्डर की सटीक स्थिति (निचले विवरण के पास) */
-            right: 20px; 
-            width: 110px; /* पोस्टर पर प्लेसहोल्डर का आकार */
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid white;
+            aspect-ratio: 9/16; /* मोबाइल स्क्रीन का अनुपात */
+            margin: 0 auto 20px auto;
+            /* यहाँ आपको अपनी पोस्टर की इमेज का नाम देना है */
+            background-image: url('poster-bg.jpg'); 
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             overflow: hidden;
-            cursor: pointer;
+        }
+
+        /* छात्र की फोटो का गोलाकार फ्रेम */
+        .student-photo-container {
+            position: absolute;
+            bottom: 60px; /* इसे अपनी बैकग्राउंड इमेज के अनुसार ऊपर-नीचे कर सकते हैं */
+            right: 20px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            background-color: #e9ecef;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
             align-items: center;
-            background-color: #e0e0e0;
-            transition: all 0.3s ease;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
         }
 
-        .student-photo-overlay:hover {
-            transform: scale(1.05);
-            background-color: #ccc;
-        }
-
-        .student-preview {
+        .student-photo-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none; /* शुरुआत में छिपा हुआ */
-        }
-
-        .upload-placeholder {
-            display: block;
-            text-align: center;
-            font-size: 14px;
-            color: #555;
-            line-height: 1.2;
-            padding: 10px;
-        }
-
-        /* फ़ाइल इनपुट छिपा हुआ */
-        #student-photo-input {
             display: none;
         }
 
+        /* बटन्स की स्टाइलिंग */
+        .controls { display: flex; flex-direction: column; gap: 12px; }
+        button, .upload-btn {
+            background: #28a745; 
+            color: white; 
+            border: none; 
+            padding: 12px 15px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .upload-btn { background: #007bff; }
+        .upload-btn:hover { background: #0056b3; }
+        button:hover { background: #218838; }
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
+    <div class="app-container">
+        <h2>VICT Computers</h2>
+        <p>अपनी फोटो लगाएं और शहीद दिवस का पोस्टर डाउनलोड करें</p>
+        
+        <div id="poster-node">
+            <label class="student-photo-container">
+                <span id="placeholder-text">फोटो<br>चुनें</span>
+                <img id="student-img" src="" alt="Student">
+                <input type="file" id="image-upload" accept="image/*">
+            </label>
+        </div>
 
-    <div class="poster-container">
-        <img src="image_2.png" alt="Shaheed Diwas Poster Template" class="poster-image">
-
-        <label for="student-photo-input" class="student-photo-overlay">
-            <span class="upload-placeholder">यहाँ छात्र की<br>फोटो लगाएं</span>
-            <img src="" alt="Student Preview" class="student-preview" id="student-preview">
-        </label>
-        <input type="file" id="student-photo-input" accept="image/*">
+        <div class="controls">
+            <button onclick="downloadPoster()">पोस्टर डाउनलोड करें ⬇️</button>
+        </div>
     </div>
 
     <script>
-        const fileInput = document.getElementById('student-photo-input');
-        const previewImage = document.getElementById('student-preview');
-        const placeholderText = document.querySelector('.upload-placeholder');
-
-        fileInput.addEventListener('change', function() {
-            const file = this.files[0];
+        // फोटो अपलोड करने का फंक्शन
+        document.getElementById('image-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function() {
-                    previewImage.src = reader.result;
-                    previewImage.style.display = 'block';
-                    placeholderText.style.display = 'none';
-                }
+                reader.onload = function(e) {
+                    const imgElement = document.getElementById('student-img');
+                    imgElement.src = e.target.result;
+                    imgElement.style.display = 'block';
+                    document.getElementById('placeholder-text').style.display = 'none';
+                };
                 reader.readAsDataURL(file);
             }
         });
-    </script>
 
+        // पोस्टर को इमेज के रूप में डाउनलोड करने का फंक्शन
+        function downloadPoster() {
+            const posterNode = document.getElementById('poster-node');
+            const downloadBtn = document.querySelector('button');
+            
+            downloadBtn.innerText = "डाउनलोड हो रहा है...";
+            downloadBtn.style.background = "#6c757d";
+
+            // html2canvas का उपयोग करके div को इमेज में बदलना
+            html2canvas(posterNode, { 
+                useCORS: true, 
+                scale: 2 // हाई क्वालिटी के लिए
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Shaheed_Diwas_VICT.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+                
+                downloadBtn.innerText = "पोस्टर डाउनलोड करें ⬇️";
+                downloadBtn.style.background = "#28a745";
+            });
+        }
+    </script>
 </body>
 </html>
